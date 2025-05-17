@@ -11,6 +11,8 @@ import com.itss2.sbtc.huststudentevent.repository.UserRepository;
 import com.itss2.sbtc.huststudentevent.service.EventService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -72,5 +74,44 @@ public class EventServiceImpl implements EventService {
         }
 
         this.applicationRepository.registerEvent(userId, eventId);
+    }
+
+    @Override
+    public EventResponse getEventDetails(String eventId) {
+        Event event = this.eventRepository.findById(eventId).orElseThrow(
+                () -> new BaseException("Event with id " + eventId + " does not exist"));
+
+        return EventResponse.builder()
+                .id(event.getId())
+                .name(event.getName())
+                .startDate(event.getStartDate())
+                .endDate(event.getEndDate())
+                .location(event.getLocation())
+                .description(event.getDescription())
+                .image(event.getImage())
+                .status(event.getStatus())
+                .type(event.getType())
+                .createdAt(event.getCreatedAt())
+                .updatedAt(event.getUpdatedAt())
+                .build();
+    }
+
+    @Override
+    public Page<EventResponse> getEvents(Pageable pageable) {
+        return this.eventRepository.findAll(pageable).map(
+                event -> EventResponse.builder()
+                        .id(event.getId())
+                        .name(event.getName())
+                        .startDate(event.getStartDate())
+                        .endDate(event.getEndDate())
+                        .location(event.getLocation())
+                        .description(event.getDescription())
+                        .image(event.getImage())
+                        .status(event.getStatus())
+                        .type(event.getType())
+                        .createdAt(event.getCreatedAt())
+                        .updatedAt(event.getUpdatedAt())
+                        .build()
+        );
     }
 }

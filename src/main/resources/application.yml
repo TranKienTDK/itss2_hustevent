@@ -12,3 +12,8 @@ spring:
       password: root
   main:
     allow-bean-definition-overriding: true
+
+cloudinary:
+  cloud-name: dcpz6bqyl
+  api-key: 832475981822277
+  api-secret: 0hn_kdhvvll9Iaw-8dijdJ4xYZQ

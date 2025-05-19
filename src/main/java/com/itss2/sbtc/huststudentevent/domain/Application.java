@@ -12,7 +12,7 @@ import java.time.LocalDateTime;
 @Builder
 @Document(collection = "applications")
 public class Application extends BaseEntity {
-    private String userId;
+    private String mssv;
     private String eventId;
     private LocalDateTime appliedAt;
 }

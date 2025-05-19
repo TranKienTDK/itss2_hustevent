@@ -8,6 +8,6 @@ import lombok.*;
 @NoArgsConstructor
 @Builder
 public class RegisterRequest {
-    private String userId;
+    private String mssvId;
     private String eventId;
 }

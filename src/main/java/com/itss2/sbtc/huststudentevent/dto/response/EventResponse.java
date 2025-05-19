@@ -6,6 +6,7 @@ import lombok.*;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Getter
 @Setter
@@ -22,6 +23,7 @@ public class EventResponse {
     private String image;
     private EventStatusEnum status;
     private EventTypeEnum type;
+    private List<String> mssv;
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
 }

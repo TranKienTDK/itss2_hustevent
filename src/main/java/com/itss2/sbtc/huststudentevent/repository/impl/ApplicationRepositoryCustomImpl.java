@@ -15,10 +15,10 @@ public class ApplicationRepositoryCustomImpl implements ApplicationRepositoryCus
     private final MongoTemplate mongoTemplate;
 
     @Override
-    public void registerEvent(String userId, String eventId) {
+    public void registerEvent(String mssv, String eventId) {
         this.mongoTemplate.save(
                 Application.builder()
-                        .userId(userId)
+                        .mssv(mssv)
                         .eventId(eventId)
                         .appliedAt(LocalDateTime.now())
                         .build()

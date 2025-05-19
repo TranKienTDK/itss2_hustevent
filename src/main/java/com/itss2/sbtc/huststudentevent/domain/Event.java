@@ -6,6 +6,7 @@ import lombok.*;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.time.LocalDate;
+import java.util.List;
 
 @Getter
 @Setter
@@ -22,4 +23,5 @@ public class Event extends BaseEntity {
     private String image;
     private EventStatusEnum status;
     private EventTypeEnum type;
+    List<String> mssv;
 }

@@ -7,7 +7,6 @@ import com.itss2.sbtc.huststudentevent.dto.response.EventResponse;
 import com.itss2.sbtc.huststudentevent.exception.BaseException;
 import com.itss2.sbtc.huststudentevent.repository.ApplicationRepository;
 import com.itss2.sbtc.huststudentevent.repository.EventRepository;
-import com.itss2.sbtc.huststudentevent.repository.UserRepository;
 import com.itss2.sbtc.huststudentevent.service.EventService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -16,6 +15,9 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Service
 @Slf4j
 @RequiredArgsConstructor
@@ -23,7 +25,6 @@ public class EventServiceImpl implements EventService {
 
     private final EventRepository eventRepository;
     private final ApplicationRepository applicationRepository;
-    private final UserRepository userRepository;
 
     @Override
     public EventResponse createEvent(EventRequest eventRequest) {
@@ -47,6 +48,7 @@ public class EventServiceImpl implements EventService {
                 .location(event.getLocation())
                 .description(event.getDescription())
                 .image(event.getImage())
+                .mssv(event.getMssv())
                 .status(event.getStatus())
                 .type(event.getType())
                 .createdAt(event.getCreatedAt())
@@ -58,22 +60,25 @@ public class EventServiceImpl implements EventService {
     @Transactional
     public void registerEvent(RegisterRequest request) {
         String eventId = request.getEventId();
-        String userId = request.getUserId();
+        String mssvId = request.getMssvId();
 
         if (!this.eventRepository.existsById(eventId)) {
             throw new BaseException("Event with id " + eventId + " does not exist");
         }
 
-        if (!this.userRepository.existsById(userId)) {
-            throw new BaseException("User with id " + userId + " does not exist");
+        Event event = this.eventRepository.findById(eventId).orElse(null);
+        List<String> newMssvIds = event.getMssv();
+        if (newMssvIds == null) {
+            newMssvIds = new ArrayList<>();
         }
-
-        if (this.applicationRepository.findByUserIdAndEventId(userId, eventId) != null) {
-            throw new BaseException("User with id " + userId +
-                    "already registered event with id " + eventId);
+        if (newMssvIds.contains(mssvId)) {
+            throw new BaseException("Mssv id " + mssvId + " has already been registered");
         }
+        newMssvIds.add(mssvId);
+        event.setMssv(newMssvIds);
+        this.eventRepository.save(event);
 
-        this.applicationRepository.registerEvent(userId, eventId);
+        this.applicationRepository.registerEvent(mssvId, eventId);
     }
 
     @Override
@@ -90,6 +95,7 @@ public class EventServiceImpl implements EventService {
                 .description(event.getDescription())
                 .image(event.getImage())
                 .status(event.getStatus())
+                .mssv(event.getMssv())
                 .type(event.getType())
                 .createdAt(event.getCreatedAt())
                 .updatedAt(event.getUpdatedAt())
@@ -108,6 +114,7 @@ public class EventServiceImpl implements EventService {
                         .description(event.getDescription())
                         .image(event.getImage())
                         .status(event.getStatus())
+                        .mssv(event.getMssv())
                         .type(event.getType())
                         .createdAt(event.getCreatedAt())
                         .updatedAt(event.getUpdatedAt())

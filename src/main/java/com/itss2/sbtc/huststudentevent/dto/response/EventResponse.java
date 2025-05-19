@@ -24,6 +24,7 @@ public class EventResponse {
     private EventStatusEnum status;
     private EventTypeEnum type;
     private List<String> mssv;
+    private boolean applicationStatus;
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
 }

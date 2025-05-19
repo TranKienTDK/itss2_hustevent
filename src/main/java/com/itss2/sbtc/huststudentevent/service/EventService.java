@@ -9,6 +9,6 @@ import org.springframework.data.domain.Pageable;
 public interface EventService {
     EventResponse createEvent(EventRequest eventRequest);
     void registerEvent(RegisterRequest request);
-    EventResponse getEventDetails(String eventId);
-    Page<EventResponse> getEvents(Pageable pageable);
+    EventResponse getEventDetails(String eventId, String mssvId);
+    Page<EventResponse> getEvents(Pageable pageable, String mssvId);
 }

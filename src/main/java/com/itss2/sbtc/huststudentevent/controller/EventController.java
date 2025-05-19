@@ -40,22 +40,24 @@ public class EventController {
     }
 
     @GetMapping("/{eventId}")
-    public ApiResponse<EventResponse> getEvent(@PathVariable String eventId) {
+    public ApiResponse<EventResponse> getEvent(@PathVariable String eventId,
+                                               @RequestParam(name = "mssvId", required = false) String mssvId) {
         return ApiResponse.<EventResponse>builder()
                 .statusCode(HttpStatus.OK.value())
                 .message("Lấy thông tin chi tiết sự kiện thành công")
-                .data(this.eventService.getEventDetails(eventId))
+                .data(this.eventService.getEventDetails(eventId, mssvId))
                 .build();
     }
 
     @GetMapping
     public ApiResponse<Page<EventResponse>> getAllEvents(
+            @RequestParam(name = "mssvId", required = false) String mssvId,
             @PageableDefault(size = 5, sort = "createdAt", direction = Sort.Direction.DESC) Pageable pageable
     ) {
         return ApiResponse.<Page<EventResponse>>builder()
                 .statusCode(HttpStatus.OK.value())
                 .message("Lấy danh sách sự kiện thành công")
-                .data(this.eventService.getEvents(pageable))
+                .data(this.eventService.getEvents(pageable, mssvId))
                 .build();
     }
 }

@@ -82,9 +82,30 @@ public class EventServiceImpl implements EventService {
     }
 
     @Override
-    public EventResponse getEventDetails(String eventId) {
+    public EventResponse getEventDetails(String eventId, String mssvId) {
         Event event = this.eventRepository.findById(eventId).orElseThrow(
                 () -> new BaseException("Event with id " + eventId + " does not exist"));
+
+        if (mssvId == null) {
+            return EventResponse.builder()
+                    .id(event.getId())
+                    .name(event.getName())
+                    .startDate(event.getStartDate())
+                    .endDate(event.getEndDate())
+                    .location(event.getLocation())
+                    .description(event.getDescription())
+                    .image(event.getImage())
+                    .mssv(event.getMssv())
+                    .status(event.getStatus())
+                    .type(event.getType())
+                    .createdAt(event.getCreatedAt())
+                    .updatedAt(event.getUpdatedAt())
+                    .applicationStatus(false)
+                    .build();
+        }
+
+        List<String> mssvIds = event.getMssv();
+        boolean isRegistered = mssvIds != null && mssvIds.contains(mssvId);
 
         return EventResponse.builder()
                 .id(event.getId())
@@ -99,26 +120,51 @@ public class EventServiceImpl implements EventService {
                 .type(event.getType())
                 .createdAt(event.getCreatedAt())
                 .updatedAt(event.getUpdatedAt())
+                .applicationStatus(isRegistered)
                 .build();
     }
 
     @Override
-    public Page<EventResponse> getEvents(Pageable pageable) {
-        return this.eventRepository.findAll(pageable).map(
-                event -> EventResponse.builder()
-                        .id(event.getId())
-                        .name(event.getName())
-                        .startDate(event.getStartDate())
-                        .endDate(event.getEndDate())
-                        .location(event.getLocation())
-                        .description(event.getDescription())
-                        .image(event.getImage())
-                        .status(event.getStatus())
-                        .mssv(event.getMssv())
-                        .type(event.getType())
-                        .createdAt(event.getCreatedAt())
-                        .updatedAt(event.getUpdatedAt())
-                        .build()
-        );
+    public Page<EventResponse> getEvents(Pageable pageable, String mssvId) {
+        Page<Event> eventPage = this.eventRepository.findAll(pageable);
+
+        if (mssvId == null) {
+            return eventPage.map(event -> EventResponse.builder()
+                    .id(event.getId())
+                    .name(event.getName())
+                    .startDate(event.getStartDate())
+                    .endDate(event.getEndDate())
+                    .location(event.getLocation())
+                    .description(event.getDescription())
+                    .image(event.getImage())
+                    .status(event.getStatus())
+                    .mssv(event.getMssv())
+                    .type(event.getType())
+                    .createdAt(event.getCreatedAt())
+                    .updatedAt(event.getUpdatedAt())
+                    .applicationStatus(false)
+                    .build());
+        }
+
+        return eventPage.map(event -> {
+            EventResponse eventResponse = new EventResponse();
+            List<String> mssvIds = event.getMssv();
+            eventResponse.setApplicationStatus(mssvIds != null && mssvIds.contains(mssvId));
+
+            eventResponse.setId(event.getId());
+            eventResponse.setName(event.getName());
+            eventResponse.setStartDate(event.getStartDate());
+            eventResponse.setEndDate(event.getEndDate());
+            eventResponse.setLocation(event.getLocation());
+            eventResponse.setDescription(event.getDescription());
+            eventResponse.setImage(event.getImage());
+            eventResponse.setStatus(event.getStatus());
+            eventResponse.setMssv(mssvIds);
+            eventResponse.setType(event.getType());
+            eventResponse.setCreatedAt(event.getCreatedAt());
+            eventResponse.setUpdatedAt(event.getUpdatedAt());
+
+            return eventResponse;
+        });
     }
 }

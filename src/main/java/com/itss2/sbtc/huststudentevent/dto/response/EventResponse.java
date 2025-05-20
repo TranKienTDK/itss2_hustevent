@@ -1,6 +1,5 @@
 package com.itss2.sbtc.huststudentevent.dto.response;
 
-import com.itss2.sbtc.huststudentevent.util.constant.EventStatusEnum;
 import com.itss2.sbtc.huststudentevent.util.constant.EventTypeEnum;
 import lombok.*;
 
@@ -21,7 +20,11 @@ public class EventResponse {
     private String location;
     private String description;
     private String image;
-    private EventStatusEnum status;
+    private String hostName;
+    private String hostPhone;
+    private String hostEmail;
+    private Integer quantity;
+    private Integer numberOfMssv;
     private EventTypeEnum type;
     private List<String> mssv;
     private boolean applicationStatus;

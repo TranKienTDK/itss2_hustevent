@@ -35,7 +35,10 @@ public class EventServiceImpl implements EventService {
                 .endDate(eventRequest.getEndDate())
                 .location(eventRequest.getLocation())
                 .image(eventRequest.getImage())
-                .status(eventRequest.getStatus())
+                .hostName(eventRequest.getHostName())
+                .hostPhone(eventRequest.getHostPhone())
+                .hostEmail(eventRequest.getHostEmail())
+                .quantity(eventRequest.getQuantity())
                 .type(eventRequest.getType())
                 .build();
 
@@ -49,8 +52,11 @@ public class EventServiceImpl implements EventService {
                 .description(event.getDescription())
                 .image(event.getImage())
                 .mssv(event.getMssv())
-                .status(event.getStatus())
                 .type(event.getType())
+                .hostName(event.getHostName())
+                .hostPhone(event.getHostPhone())
+                .hostEmail(event.getHostEmail())
+                .quantity(event.getQuantity())
                 .createdAt(event.getCreatedAt())
                 .updatedAt(event.getUpdatedAt())
                 .build();
@@ -71,9 +77,15 @@ public class EventServiceImpl implements EventService {
         if (newMssvIds == null) {
             newMssvIds = new ArrayList<>();
         }
+
         if (newMssvIds.contains(mssvId)) {
-            throw new BaseException("Mssv id " + mssvId + " has already been registered");
+            throw new BaseException("Student id " + mssvId + " has already been registered");
         }
+
+        if (newMssvIds.size() == event.getQuantity()) {
+            throw new BaseException("This event has reached its registration limit.");
+        }
+
         newMssvIds.add(mssvId);
         event.setMssv(newMssvIds);
         this.eventRepository.save(event);
@@ -96,8 +108,12 @@ public class EventServiceImpl implements EventService {
                     .description(event.getDescription())
                     .image(event.getImage())
                     .mssv(event.getMssv())
-                    .status(event.getStatus())
                     .type(event.getType())
+                    .hostName(event.getHostName())
+                    .hostPhone(event.getHostPhone())
+                    .hostEmail(event.getHostEmail())
+                    .quantity(event.getQuantity())
+                    .numberOfMssv(event.getMssv() == null ? 0 : event.getMssv().size())
                     .createdAt(event.getCreatedAt())
                     .updatedAt(event.getUpdatedAt())
                     .applicationStatus(false)
@@ -115,8 +131,12 @@ public class EventServiceImpl implements EventService {
                 .location(event.getLocation())
                 .description(event.getDescription())
                 .image(event.getImage())
-                .status(event.getStatus())
                 .mssv(event.getMssv())
+                .hostName(event.getHostName())
+                .hostPhone(event.getHostPhone())
+                .hostEmail(event.getHostEmail())
+                .quantity(event.getQuantity())
+                .numberOfMssv(event.getMssv() == null ? 0 : event.getMssv().size())
                 .type(event.getType())
                 .createdAt(event.getCreatedAt())
                 .updatedAt(event.getUpdatedAt())
@@ -137,8 +157,12 @@ public class EventServiceImpl implements EventService {
                     .location(event.getLocation())
                     .description(event.getDescription())
                     .image(event.getImage())
-                    .status(event.getStatus())
                     .mssv(event.getMssv())
+                    .hostName(event.getHostName())
+                    .hostPhone(event.getHostPhone())
+                    .hostEmail(event.getHostEmail())
+                    .quantity(event.getQuantity())
+                    .numberOfMssv(event.getMssv() == null ? 0 : event.getMssv().size())
                     .type(event.getType())
                     .createdAt(event.getCreatedAt())
                     .updatedAt(event.getUpdatedAt())
@@ -158,9 +182,13 @@ public class EventServiceImpl implements EventService {
             eventResponse.setLocation(event.getLocation());
             eventResponse.setDescription(event.getDescription());
             eventResponse.setImage(event.getImage());
-            eventResponse.setStatus(event.getStatus());
             eventResponse.setMssv(mssvIds);
             eventResponse.setType(event.getType());
+            eventResponse.setHostName(event.getHostName());
+            eventResponse.setHostPhone(event.getHostPhone());
+            eventResponse.setHostEmail(event.getHostEmail());
+            eventResponse.setQuantity(event.getQuantity());
+            eventResponse.setNumberOfMssv(event.getMssv() == null ? 0 : event.getMssv().size());
             eventResponse.setCreatedAt(event.getCreatedAt());
             eventResponse.setUpdatedAt(event.getUpdatedAt());
 

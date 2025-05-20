@@ -6,8 +6,8 @@ server:
 spring:
   data:
     mongodb:
-      uri: mongodb+srv://root:root@hustevent.vvx1bp9.mongodb.net/?retryWrites=true&w=majority&appName=HustEvent
-      database: HustEvent
+      uri: mongodb+srv://kientranduc1:ghk4VcJU7DLkaHRn@husteventv2.kmq9zzw.mongodb.net/?retryWrites=true&w=majority&appName=HustEventV2
+      database: HustEventV2
       username: root
       password: root
   main:

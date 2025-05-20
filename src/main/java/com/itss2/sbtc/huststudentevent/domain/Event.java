@@ -1,6 +1,5 @@
 package com.itss2.sbtc.huststudentevent.domain;
 
-import com.itss2.sbtc.huststudentevent.util.constant.EventStatusEnum;
 import com.itss2.sbtc.huststudentevent.util.constant.EventTypeEnum;
 import lombok.*;
 import org.springframework.data.mongodb.core.mapping.Document;
@@ -21,7 +20,10 @@ public class Event extends BaseEntity {
     private String description;
     private String location;
     private String image;
-    private EventStatusEnum status;
+    private String hostName;
+    private String hostPhone;
+    private String hostEmail;
+    private Integer quantity;
     private EventTypeEnum type;
     List<String> mssv;
 }
